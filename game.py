@@ -1,44 +1,28 @@
-import curses
-import random
+
 import pygame
 import keyboard
-from curses import panel
+
 from snake import Snake
 
 
 class Game:
-    def __init__(self, height, width, begin_y, begin_x):
-        self.height = height
-        self.width = width
-        self.position = begin_y, begin_x
-
-        self.window = curses.newwin(height, width, begin_y, begin_x)
-        self.window.keypad(True)
-        self.window.box()
-
-        self.snake = Snake(height, width)
+    def __init__(self, window):
+        self.fruit_count = 2
+        self.window = window
+        self.snake = Snake(window.height, window.width, self.fruit_count)
 
         pygame.init()
         self.fps = 10
         self.fpsClock = pygame.time.Clock()
 
-    def generate_fruit(self):
-        pass
-
-    def draw_segment(self, y, x):
-        if x == self.width - 1 and y == self.height - 1:
-            pass
-        else:
-            self.window.addstr(y, x, "*")
-
-    def draw_food(self, y, x):
-        self.window.addstr(y, x, "ó")
+    def draw_food(self, snake):
+        for fruit in snake.food_provider.food:
+            self.window.draw_fruit(fruit[0], fruit[1])
 
     def draw_snake(self, snake):
-        self.window.clear()
         for segment in snake.segments:
-            self.draw_segment(segment[0], segment[1])
-        self.window.refresh()
+            self.window.draw_segment(segment[0], segment[1])
+
     # curses have CURSED oreintation
 
     def translate_event(self):
@@ -51,11 +35,15 @@ class Game:
         if keyboard.is_pressed("right arrow"):
             return 'KEY_DOWN'
 
-    def test(self):
-        self.window.refresh()
+    def play(self):
         while True:
-            self.snake.move()
+            if self.snake.move() == 1:
+                self.window.end(1)
+                break
+            self.window.clear()
             self.draw_snake(self.snake)
+            self.draw_food(self.snake)
+            self.window.refresh()
             self.snake.react(self.translate_event())
             self.fpsClock.tick(self.fps)
 

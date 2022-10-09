@@ -1,4 +1,5 @@
 import curses
+from game_window import GameWindow
 from menu import Menu
 from game import Game
 # game terminal with static overlay and dynamic gamewindow
@@ -14,23 +15,28 @@ class Screen:
         curses.start_color()
         curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_WHITE)
         self.stdscr.bkgd(' ', curses.color_pair(1) | curses.A_BOLD)
-        self.stdscr.border(0)
 
-        # Gamewindow with attributes
+        # Menu window
         self.menuwin = curses.newwin(height, width, begin_y, begin_x)
         self.menuwin.keypad(True)
 
+        # TODO layout
         self.stdscr.clear()
-        self.stdscr.addstr(0, 0, "Snake")
+        self.stdscr.addstr(1, (width) // 2 + 2, "Snake")
         self.stdscr.refresh()
 
+    def init_game(self):
+        window = GameWindow(20, 20, 5, 5)
+        game = Game(window)
+        game.play()
+
     def init_menu(self):
-        game = Game(20, 20, 5, 5)
+        # TODO Settings menu
         submenu_items = [("beep", curses.beep), ("flash", curses.flash)]
         submenu = Menu(submenu_items, self.menuwin)
 
         main_menu_items = [
-            ("game", game.test),
+            ("game", self.init_game),
             ("flash", curses.flash),
             ("submenu", submenu.display),
         ]
