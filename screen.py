@@ -7,10 +7,14 @@ from game import Game
 
 class Screen:
     def __init__(self, stdscreen, height, width, begin_y, begin_x):
-        self.stdscr = stdscreen  # object of
+        self.stdscr = stdscreen  # object of screen
         curses.curs_set(0)
         curses.noecho()
         curses.cbreak()
+        curses.start_color()
+        curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_WHITE)
+        self.stdscr.bkgd(' ', curses.color_pair(1) | curses.A_BOLD)
+        self.stdscr.border(0)
 
         # Gamewindow with attributes
         self.menuwin = curses.newwin(height, width, begin_y, begin_x)
