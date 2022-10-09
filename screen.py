@@ -5,7 +5,7 @@ from game import Game
 # screen != menu, to enable submenus
 
 
-class GameScreen:
+class Screen:
     def __init__(self, stdscreen, height, width, begin_y, begin_x):
         self.stdscr = stdscreen  # object of
         curses.curs_set(0)
@@ -37,8 +37,8 @@ class GameScreen:
 class MyApp(object):
     def __init__(self, stdscreen):
         self.screen = stdscreen
-        self.game = GameScreen(self.screen, 20, 20, 5, 5)
-        self.game.init_menu()
+        self.gameMenu = Screen(self.screen, 20, 20, 5, 5)
+        self.gameMenu.init_menu()
 
 
 if __name__ == "__main__":
