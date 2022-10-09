@@ -5,9 +5,8 @@ from curses import panel
 
 
 class Menu(object):
-    def __init__(self, items, stdscreen):
-        self.window = stdscreen.subwin(0, 0)
-        self.window.keypad(1)
+    def __init__(self, items, window):
+        self.window = window
         self.panel = panel.new_panel(self.window)
         self.panel.hide()
         panel.update_panels()
@@ -29,9 +28,8 @@ class Menu(object):
         self.window.clear()
 
         while True:
-            self.window.refresh()
-            curses.doupdate()
             for index, item in enumerate(self.items):
+                # reverse - highlighted option
                 if index == self.position:
                     mode = curses.A_REVERSE
                 else:
@@ -40,12 +38,17 @@ class Menu(object):
                 msg = "%d. %s" % (index, item[0])
                 self.window.addstr(1 + index, 1, msg, mode)
 
+            self.window.refresh()
+            curses.doupdate()
+
             key = self.window.getch()
 
             if key in [curses.KEY_ENTER, ord("\n")]:
                 if self.position == len(self.items) - 1:
                     break
                 else:
+                    self.window.clear()
+                    self.window.refresh()
                     self.items[self.position][1]()
 
             elif key == curses.KEY_UP:
@@ -56,24 +59,3 @@ class Menu(object):
 
         self.panel.hide()
         curses.doupdate()
-
-
-class MyApp(object):
-    def __init__(self, stdscreen):
-        self.screen = stdscreen
-        curses.curs_set(0)
-
-        submenu_items = [("beep", curses.beep), ("flash", curses.flash)]
-        submenu = Menu(submenu_items, self.screen)
-
-        main_menu_items = [
-            ("beep", curses.beep),
-            ("flash", curses.flash),
-            ("submenu", submenu.display),
-        ]
-        main_menu = Menu(main_menu_items, self.screen)
-        main_menu.display()
-
-
-if __name__ == "__main__":
-    curses.wrapper(MyApp)
