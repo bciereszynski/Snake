@@ -44,7 +44,7 @@ class Screen:
         main_menu.display()
 
 
-class MyApp(object):
+class App(object):
     def __init__(self, stdscreen):
         self.screen = stdscreen
         self.gameMenu = Screen(self.screen, 20, 20, 5, 5)
@@ -52,4 +52,4 @@ class MyApp(object):
 
 
 if __name__ == "__main__":
-    curses.wrapper(MyApp)
+    curses.wrapper(App)

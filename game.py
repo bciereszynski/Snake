@@ -23,7 +23,7 @@ class Game:
         for segment in snake.segments:
             self.window.draw_segment(segment[0], segment[1])
 
-    # curses have CURSED oreintation
+    # curses have CURSED orientation
 
     def translate_event(self):
         if keyboard.is_pressed("up arrow"):
