@@ -14,6 +14,7 @@ class Snake:
         self.y_limit = y_limit
         self.x_limit = x_limit
 
+
         # TODO - initial configure
         self.segments = [[0, 0], [1, 0], [2, 0], [2, 1]]
         self.direction = 'Right'
@@ -40,10 +41,10 @@ class Snake:
             self.food_provider.food.remove(head)
             self.has_eaten = True
             self.food_provider.generate()
-            return 0
+            return 1
         # eat yourself
         elif self.segments.count(head) != 1:
-            return 1
+            return -1
         else:
             return 0
 
@@ -59,10 +60,8 @@ class Snake:
         self.segments.append(
             [head[0] + vector[0], head[1] + vector[1]])
         self.__normalize_segments()
-        # try eat - food(0) or yourself(1)
-        if self.try_eat(self.segments[-1], vector) == 1:
-            return 1
-        return 0
+        # try eat - food(1) or yourself(-1) nothing(0)
+        return self.try_eat(self.segments[-1], vector)
 
     def react(self, event):
         if event == 'KEY_UP' and self.direction != 'Down':
@@ -73,5 +72,7 @@ class Snake:
             self.direction = 'Left'
         elif event == 'KEY_RIGHT' and self.direction != 'Left':
             self.direction = 'Right'
+        elif event == 'QUIT':
+            return 1
         else:
-            pass
+            return 0

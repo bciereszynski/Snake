@@ -1,6 +1,6 @@
 
-
 import curses
+import winsound
 from curses import panel
 
 
@@ -13,7 +13,7 @@ class Menu(object):
 
         self.position = 0
         self.items = items
-        self.items.append(("exit", "exit"))
+        self.items.append(("EXIT", "EXIT"))
 
     def navigate(self, n):
         self.position += n
@@ -35,7 +35,7 @@ class Menu(object):
                 else:
                     mode = curses.A_NORMAL
 
-                msg = "%d. %s" % (index, item[0])
+                msg = " %s" % (item[0])
                 self.window.addstr(1 + index, 1, msg, mode)
 
             self.window.refresh()
@@ -44,12 +44,13 @@ class Menu(object):
             key = self.window.getch()
 
             if key in [curses.KEY_ENTER, ord("\n")]:
+                winsound.Beep(300, 100)
+                self.window.clear()
                 if self.position == len(self.items) - 1:
                     break
                 else:
-                    self.window.clear()
-                    self.window.refresh()
                     self.items[self.position][1]()
+                    self.window.refresh()
 
             elif key == curses.KEY_UP:
                 self.navigate(-1)
