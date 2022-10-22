@@ -14,7 +14,6 @@ class Snake:
         self.y_limit = y_limit
         self.x_limit = x_limit
 
-
         # TODO - initial configure
         self.segments = [[0, 0], [1, 0], [2, 0], [2, 1]]
         self.direction = 'Right'

@@ -38,6 +38,10 @@ class Menu(object):
                 msg = " %s" % (item[0])
                 self.window.addstr(1 + index, 1, msg, mode)
 
+            # self.window.attron(curses.color_pair(2))
+            #self.window.border('█', '█', '█', '█', '█', '█', '█', '█')
+            # self.window.attroff(curses.color_pair(2))
+
             self.window.refresh()
             curses.doupdate()
 

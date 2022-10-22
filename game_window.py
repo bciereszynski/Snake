@@ -1,6 +1,8 @@
 import curses
 import keyboard
 import pygame
+import time
+from pygame import mixer
 from curses import panel
 
 
@@ -11,8 +13,13 @@ class GameWindow:
         self.width = width
         self.window.keypad(True)
         pygame.init()
+        mixer.init()
+        mixer.music.load("sound.mp3")
+        mixer.music.set_volume(0.1)
         self.fps = fps
         self.fpsClock = pygame.time.Clock()
+        curses.init_pair(5, curses.COLOR_RED, 0)
+        curses.init_pair(6, curses.COLOR_GREEN, 0)
 
     def translate_event(self):
         if keyboard.is_pressed("up arrow"):
@@ -26,23 +33,38 @@ class GameWindow:
         if keyboard.is_pressed("esc"):
             return 'QUIT'
 
+    def sound(self):
+        mixer.music.play()
+
     def draw_segment(self, y, x):
         if x == self.width - 1 and y == self.height - 1:
             pass
         else:
-            self.window.addstr(y, x, "*")
+            self.window.addstr(y, x, "@", curses.color_pair(6))
 
     def draw_fruit(self, y, x):
         if x == self.width - 1 and y == self.height - 1:
             pass
         else:
-            self.window.addstr(y, x, "ó")
+            self.window.addstr(y, x, "Ó", curses.color_pair(5))
 
     def clear(self):
         self.window.clear()
 
     def refresh(self):
         self.window.refresh()
+
+    def gameover(self, points):
+        msgTop = "  GAME OVER!  "
+        msgBottom = "  Points: " + str(points) + "  "
+        self.window.addstr(self.height // 2, self.width //
+                           2 - len(msgTop) // 2, msgTop)
+        self.window.addstr(self.height // 2 + 1, self.width //
+                           2 - len(msgBottom) // 2, msgBottom)
+        self.window.refresh()
+        time.sleep(2)
+
+        self.window.getch()
 
     def fpsTick(self):
         self.fpsClock.tick(self.fps)

@@ -1,10 +1,13 @@
 class Settings:
     def __init__(self):
-        self.difficulties = [("easy", 10), ("medium", 15), ("hard", 25)]
-        self.map_sizes = [("small", 20, 20),
-                          ("medium", 20, 40), ("large", 20, 80)]
+        self.difficulties = [("EASY", 10), ("MEDIUM", 15), ("HARD", 25)]
+        self.map_sizes = [("SMALL", 20, 25),
+                          ("MEDIUM", 20, 50), ("LARGE", 20, 100)]
+        self.soundString = ["OFF", "ON"]
         self.difficultyId = 0
         self.mapId = 1
+        self.fruit_count = 2
+        self.sound = 1
 
     def difficultySwitch(self):
         self.difficultyId = (self.difficultyId + 1) % len(self.difficulties)
@@ -17,3 +20,15 @@ class Settings:
 
     def mapSwitch(self):
         self.mapId = (self.mapId + 1) % len(self.map_sizes)
+
+    def getSound(self):
+        return self.soundString[self.sound]
+
+    def soundSwitch(self):
+        self.sound = (self.sound + 1) % len(self.soundString)
+
+    def fruitAdd(self):
+        self.fruit_count = self.fruit_count + 1
+
+    def fruitRemove(self):
+        self.fruit_count = self.fruit_count - 1

@@ -1,13 +1,15 @@
 
 from snake import Snake
+from settings import Settings
 
 
 class Game:
-    def __init__(self, window):
-        self.fruit_count = 2
+    def __init__(self, window, settings):
+        self.settings = settings
         self.points = 0
         self.window = window
-        self.snake = Snake(window.height, window.width, self.fruit_count)
+        self.snake = Snake(window.height, window.width,
+                           self.settings.fruit_count)
 
     def draw_food(self, snake):
         for fruit in snake.food_provider.food:
@@ -22,10 +24,13 @@ class Game:
     def play(self):
         while True:
             result = self.snake.move()
-            if result ==-1:
+            if result == -1:
+                self.window.gameover(self.points)
                 break
             elif result == 1:
                 self.points = self.points + 1
+                if self.settings.sound == 1:
+                    self.window.sound()
             self.window.clear()
             self.draw_snake(self.snake)
             self.draw_food(self.snake)
