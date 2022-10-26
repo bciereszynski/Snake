@@ -3,8 +3,8 @@ import curses
 import os
 from game_window import GameWindow
 from menu import Menu
-from game import Game
-from settings import Settings
+from logic.game import Game
+from logic.settings import Settings
 # game terminal with static overlay and dynamic gamewindow
 # screen != menu, to enable submenus
 
