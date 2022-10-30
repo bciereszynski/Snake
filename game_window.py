@@ -12,12 +12,17 @@ class GameWindow:
         self.height = height
         self.width = width
         self.window.keypad(True)
+        self.segment = "@"
+        self.fruit = "Ó"
+
         pygame.init()
+        self.fps = fps
+        self.fpsClock = pygame.time.Clock()
+
         mixer.init()
         mixer.music.load("sound.mp3")
         mixer.music.set_volume(0.1)
-        self.fps = fps
-        self.fpsClock = pygame.time.Clock()
+
         curses.init_pair(5, curses.COLOR_RED, 0)
         curses.init_pair(6, curses.COLOR_GREEN, 0)
 
@@ -40,13 +45,13 @@ class GameWindow:
         if x == self.width - 1 and y == self.height - 1:
             pass
         else:
-            self.window.addstr(y, x, "@", curses.color_pair(6))
+            self.window.addstr(y, x, self.segment, curses.color_pair(6))
 
     def draw_fruit(self, y, x):
         if x == self.width - 1 and y == self.height - 1:
             pass
         else:
-            self.window.addstr(y, x, "Ó", curses.color_pair(5))
+            self.window.addstr(y, x, self.fruit, curses.color_pair(5))
 
     def clear(self):
         self.window.clear()
@@ -62,7 +67,7 @@ class GameWindow:
         self.window.addstr(self.height // 2 + 1, self.width //
                            2 - len(msgBottom) // 2, msgBottom)
         self.window.refresh()
-        time.sleep(2)
+        time.sleep(2.5)
 
         self.window.getch()
 

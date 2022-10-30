@@ -3,6 +3,11 @@ import curses
 import winsound
 from curses import panel
 
+'''
+Menu object takes items as pairs (string, function) and
+uses this function when button labeled as string is pressed
+'''
+
 
 class Menu(object):
     def __init__(self, items, window):
@@ -35,12 +40,8 @@ class Menu(object):
                 else:
                     mode = curses.A_NORMAL
 
-                msg = " %s" % (item[0])
+                msg = " %s " % (item[0])
                 self.window.addstr(1 + index, 1, msg, mode)
-
-            # self.window.attron(curses.color_pair(2))
-            #self.window.border('█', '█', '█', '█', '█', '█', '█', '█')
-            # self.window.attroff(curses.color_pair(2))
 
             self.window.refresh()
             curses.doupdate()

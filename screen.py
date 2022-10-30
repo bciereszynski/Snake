@@ -1,30 +1,33 @@
-#!C:\Users\bcier\Envs\Snake\Scripts\python.exe
+
 import curses
 import os
 from game_window import GameWindow
 from menu import Menu
 from logic.game import Game
 from logic.settings import Settings
+
 # game terminal with static overlay and dynamic gamewindow
 # screen != menu, to enable submenus
 
 
 class Screen:
     def __init__(self):
+        # screen init
         self.stdscr = curses.initscr()
         self.settings = Settings()
-        self.menu_y, self.menu_x = 10, 25
-
         self.maxY, self.maxX = self.stdscr.getmaxyx()
 
-        self.beginMenu_x = self.calcCenter(self.maxX) - 12
-        self.begin_y = 7
-
+        # curses init
         curses.curs_set(0)
         curses.noecho()
         curses.cbreak()
         curses.start_color()
         curses.init_pair(1, 112, 28)
+
+        # menu init
+        self.beginMenu_x = self.calcCenter(self.maxX) - 12
+        self.begin_y = 7
+        self.menu_y, self.menu_x = 10, 25
 
         self.snakeASCII = ["      _    _                                      ",
                            "   ,-(|)--(|)-.                                   ",
@@ -61,6 +64,10 @@ class Screen:
             x = x + 1
         self.stdscr.refresh()
 
+    '''
+    Methods used by menu buttons
+    '''
+
     def init_game(self):
         window = GameWindow(self.settings.getMap()[1], self.settings.getMap()[2],
                             self.begin_y, self.calcCenter(self.maxX, self.settings.getMap()[2]), self.settings.getDifficulty()[1])
@@ -79,6 +86,7 @@ class Screen:
     def changeSound(self):
         self.settings.soundSwitch()
         self.layout()
+    ####
 
     def init_menu(self):
 

@@ -19,11 +19,12 @@ class Game:
         for segment in snake.segments:
             self.window.draw_segment(segment[0], segment[1])
 
-    # curses have CURSED orientation
-
     def play(self):
         while True:
+            # check what happend when snake move
             result = self.snake.move()
+
+            # react
             if result == -1:
                 self.window.gameover(self.points)
                 break
@@ -31,12 +32,16 @@ class Game:
                 self.points = self.points + 1
                 if self.settings.sound == 1:
                     self.window.sound()
+
             self.window.clear()
             self.draw_snake(self.snake)
             self.draw_food(self.snake)
             self.window.refresh()
+
+            # esc
             if self.snake.react(self.window.translate_event()) == 1:
                 break
+
             self.window.fpsTick()
 
         self.window.clear()

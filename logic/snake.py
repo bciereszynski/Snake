@@ -2,7 +2,8 @@ from .food_provider import FoodProvider
 
 
 class Snake:
-    # to moving
+    # curses have CURSED orientation
+    # to move
     vectors = {
         'Up': (0, -1),
         'Down': (0, 1),
@@ -14,7 +15,7 @@ class Snake:
         self.y_limit = y_limit
         self.x_limit = x_limit
 
-        # TODO - initial configure
+        # initial configure
         self.segments = [[0, 0], [1, 0], [2, 0], [2, 1]]
         self.direction = 'Right'
         self.has_eaten = False
@@ -23,6 +24,9 @@ class Snake:
         for x in range(fruit_count):
             self.food_provider.generate()
 
+    '''
+    When snake go beyond edge of the map
+    '''
     def __normalize_segments(self):
         segment = self.segments[-1]
         if segment[0] >= self.y_limit:

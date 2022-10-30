@@ -1,6 +1,8 @@
 class Settings:
     def __init__(self):
+        #difficulty = (name, fps)
         self.difficulties = [("EASY", 10), ("MEDIUM", 15), ("HARD", 25)]
+        # map size = (name, ySize, xSize)
         self.map_sizes = [("SMALL", 20, 25),
                           ("MEDIUM", 20, 50), ("LARGE", 20, 100)]
         self.soundString = ["OFF", "ON"]
@@ -26,9 +28,3 @@ class Settings:
 
     def soundSwitch(self):
         self.sound = (self.sound + 1) % len(self.soundString)
-
-    def fruitAdd(self):
-        self.fruit_count = self.fruit_count + 1
-
-    def fruitRemove(self):
-        self.fruit_count = self.fruit_count - 1
