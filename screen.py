@@ -56,7 +56,7 @@ class Screen:
         self.stdscr.addstr(3, self.calcCenter(self.maxX, len(msg)), msg)
         msg = "MAP SIZE: " + self.settings.getMap()[0]
         self.stdscr.addstr(4, self.calcCenter(self.maxX, len(msg)), msg)
-        msg = "SOUND: " + self.settings.getSound()
+        msg = "IN-GAME SOUND: " + self.settings.getSound()
         self.stdscr.addstr(5, self.calcCenter(self.maxX, len(msg)), msg)
         x = 17
         for msg in self.snakeASCII:
