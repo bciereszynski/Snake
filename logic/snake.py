@@ -27,6 +27,7 @@ class Snake:
     '''
     When snake go beyond edge of the map
     '''
+
     def __normalize_segments(self):
         segment = self.segments[-1]
         if segment[0] >= self.y_limit:

@@ -22,8 +22,7 @@ class Screen:
         window = GameWindow(20, 15,
                             self.settings.getDifficulty()[1])
         game = Game(window, self.settings)
-        while True:  # main loop
-            game.play()
+        game.play()
 
 
 if __name__ == "__main__":
