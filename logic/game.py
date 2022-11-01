@@ -1,4 +1,3 @@
-
 from .snake import Snake
 from .settings import Settings
 
@@ -8,7 +7,7 @@ class Game:
         self.settings = settings
         self.points = 0
         self.window = window
-        self.snake = Snake(window.height, window.width,
+        self.snake = Snake(window.cellsX, window.cellsY,
                            self.settings.fruit_count)
 
     def draw_food(self, snake):
@@ -19,29 +18,28 @@ class Game:
         for segment in snake.segments:
             self.window.draw_segment(segment[0], segment[1])
 
+    # one snake movement
     def play(self):
-        while True:
-            # check what happend when snake move
-            result = self.snake.move()
+        # check what happend when snake move
+        result = self.snake.move()
 
-            # react
-            if result == -1:
-                self.window.gameover(self.points)
-                break
-            elif result == 1:
-                self.points = self.points + 1
-                if self.settings.sound == 1:
-                    self.window.sound()
+        # react
+        if result == -1:
+            self.window.gameover(self.points)
+            return 1
 
-            self.window.clear()
-            self.draw_snake(self.snake)
-            self.draw_food(self.snake)
-            self.window.refresh()
-
-            # esc
-            if self.snake.react(self.window.translate_event()) == 1:
-                break
-
-            self.window.fpsTick()
+        elif result == 1:
+            self.points = self.points + 1
+            if self.settings.sound == 1:
+                self.window.sound()
 
         self.window.clear()
+        self.draw_snake(self.snake)
+        self.draw_food(self.snake)
+        self.window.refresh()
+
+        # esc
+        if self.snake.react(self.window.translate_event()) == 1:
+            return 1
+
+        self.window.fpsTick()
