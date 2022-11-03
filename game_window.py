@@ -1,17 +1,17 @@
 import pygame
-import time
-import sys  # TODO delete
+
+
 from pygame import mixer
 from pygame.locals import *
 
 
 class GameWindow:
-    def __init__(self, size_x, size_y, fps):
-
-        self.cellSize = 41  # have to be even
+    def __init__(self, size_x, size_y, cell_size, displaysurf, fps):
+        self.fpsClock = pygame.time.Clock()
+        self.cellSize = cell_size  # have to be even
         self.height = size_x
         self.width = size_y
-
+        self.DISPLAYSURF = displaysurf
         self.fps = fps
 
         WHITE = (255, 255, 255)
@@ -23,6 +23,10 @@ class GameWindow:
         self.segmentImg = pygame.transform.scale(
             segmentImg, (self.cellSize, self.cellSize))
 
+        grassImg = pygame.image.load('grass.jpg')
+        self.grassImg = pygame.transform.scale(
+            grassImg, (self.cellSize * size_x, self.cellSize * size_y))
+
         headImg = pygame.image.load('head.png')
         self.headImg = pygame.transform.scale(
             headImg, (self.cellSize, self.cellSize))
@@ -31,19 +35,14 @@ class GameWindow:
         mixer.music.load("sound.mp3")
         mixer.music.set_volume(0.1)
 
-        pygame.init()
-        self.fpsClock = pygame.time.Clock()
-        self.DISPLAYSURF = pygame.display.set_mode(
-            (self.cellSize * self.height, self.cellSize * self.width))
-        pygame.display.set_caption('Snake')
-
     def draw_background(self):
         BLACK = (0, 0, 0)
         position = (
             0, 0,
             self.height * self.cellSize, self.width * self.cellSize
         )
-        pygame.draw.rect(self.DISPLAYSURF, BLACK, position)
+        #pygame.draw.rect(self.DISPLAYSURF, BLACK, position)
+        self.DISPLAYSURF.blit(self.grassImg, (0, 0))
 
     def draw_segment(self, x, y):
         position = (
@@ -78,7 +77,6 @@ class GameWindow:
 
     def translate_event(self):
         for event in pygame.event.get():
-            print(event.type == pygame.K_UP)
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
@@ -91,9 +89,8 @@ class GameWindow:
                     return 'KEY_RIGHT'
                 if event.key == pygame.K_UP:
                     return 'KEY_UP'
-
-            #    if keyboard.is_pressed("esc"):
-            #        return 'QUIT'
+                if event.key == pygame.K_ESCAPE:
+                    return 'QUIT'
 
     def sound(self):
         mixer.music.play()
@@ -105,7 +102,7 @@ class GameWindow:
         pygame.display.update()
 
     def gameover(self, points):
-        time.sleep(2.5)
+        pass
 
     def fpsTick(self):
         self.fpsClock.tick(self.fps)
