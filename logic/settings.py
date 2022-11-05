@@ -1,7 +1,7 @@
 class Settings:
     def __init__(self):
         #difficulty = (name, fps)
-        self.difficulties = [("EASY", 10), ("MEDIUM", 15), ("HARD", 25)]
+        self.difficulties = [("EASY", 15), ("HARD", 25)]
         # map size = (name, ySize, xSize)
         self.map_sizes = [("SMALL", 20, 25),
                           ("MEDIUM", 20, 50), ("LARGE", 20, 100)]

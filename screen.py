@@ -12,12 +12,11 @@ class Screen:
         self.cellSize = 41
 
         pygame.init()
-
-        self.DISPLAYSURF = pygame.display.set_mode(
+        self.surf = pygame.display.set_mode(
             (self.cellSize * self.height, self.cellSize * self.width))
         pygame.display.set_caption('Snake')
 
-        m = Menu(self.DISPLAYSURF)
+        m = Menu(self.surf, self.cellSize)
 
 
 if __name__ == "__main__":

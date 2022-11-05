@@ -36,7 +36,6 @@ class GameWindow:
         mixer.music.set_volume(0.1)
 
     def draw_background(self):
-        BLACK = (0, 0, 0)
         position = (
             0, 0,
             self.height * self.cellSize, self.width * self.cellSize
@@ -102,7 +101,11 @@ class GameWindow:
         pygame.display.update()
 
     def gameover(self, points):
-        pass
+        position = (
+            0, 0,
+            self.height * self.cellSize, self.width * self.cellSize
+        )
+        #pygame.draw.rect(self.DISPLAYSURF, BLACK, position)
 
     def fpsTick(self):
         self.fpsClock.tick(self.fps)

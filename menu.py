@@ -1,6 +1,7 @@
 import pygame
 import sys
 from pygame.locals import *
+import pygame_menu
 
 from game_window import GameWindow
 from logic.game import Game
@@ -8,66 +9,40 @@ from logic.settings import Settings
 
 
 class Menu(object):
-    def __init__(self, surface):
-        self.settings = Settings()
-        self.cellSize = 41
-        self.click = False
-        self.surface = surface
-        self.font = pygame.font.SysFont(None, 20)
-        BLACK = (0, 0, 0)
-        WHITE = (255, 255, 255)
-        RED = (255, 0, 0)
-        self.menuClock = pygame.time.Clock()
-        button_1 = pygame.Rect(50, 100, 200, 50)
-        button_2 = pygame.Rect(50, 200, 200, 50)
-        while True:
 
-            surface.fill(BLACK)
+    def set_difficulty(self, value, id):
+        self.settings.difficultySwitch()
 
-            mx, my = pygame.mouse.get_pos()
+    def set_sound(self, value, id):
+        self.settings.soundSwitch()
 
-            if button_1.collidepoint((mx, my)) and click:
-                self.init_game()
-            if button_2.collidepoint((mx, my)) and click:
-                self.options()
-            self.draw_text("main", WHITE, 20, 20)
-            pygame.draw.rect(surface, RED, button_1)
-            pygame.draw.rect(surface, RED, button_2)
-            click = False
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        click = True
-            pygame.display.update()
-
-            self.menuClock.tick(5)
-
-    def draw_text(self, text, color, x, y):
-        textobj = self.font.render(text, 1, color)
-        textrect = textobj.get_rect()
-        textrect.topleft = (x, y)
-        self.surface.blit(textobj, textrect)
-
-    def init_game(self):
+    def start_the_game(self):
         window = GameWindow(20, 15, self.cellSize, self.surface,
                             self.settings.getDifficulty()[1])
         game = Game(window, self.settings)
         game.play()
 
-    def options(self):
-        Running = 1
-        BLACK = (0, 0, 0)
-        WHITE = (255, 255, 255)
-        while Running:
-            self.surface.fill(BLACK)
-            self.draw_text("options", WHITE, 20, 20)
-            click = False
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        Running = 0
-            pygame.display.update()
-            self.menuClock.tick(30)
+    def drawBackground(self):
+        self.surface.fill((255, 255, 255))
+
+    def __init__(self, surface, cellSize):
+        self.settings = Settings()
+        self.cellSize = cellSize
+        self.surface = surface
+
+        submenu = pygame_menu.Menu('SUB_MENU', 400, 300,
+                                   theme=pygame_menu.themes.THEME_GREEN)
+        submenu.add.selector(
+            'Difficulty :', [('Easy', 0), ('Hard', 1)], onchange=self.set_difficulty)
+        submenu.add.selector(
+            'Sound :', [('ON', 1), ("OFF", 0)], onchange=self.set_sound)
+        submenu.add.button('Quit', pygame_menu.events.BACK)
+
+        menu = pygame_menu.Menu('MAIN_MENU', 400, 300,
+                                theme=pygame_menu.themes.THEME_GREEN)
+
+        menu.add.text_input('Name :', default='John Doe')
+        menu.add.button('Play', self.start_the_game)
+        menu.add.button('Settings', submenu)
+        menu.add.button('Quit', pygame_menu.events.EXIT)
+        menu.mainloop(surface, self.drawBackground)
