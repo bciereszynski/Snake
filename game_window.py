@@ -1,4 +1,5 @@
 import pygame
+import time
 
 
 from pygame import mixer
@@ -6,33 +7,35 @@ from pygame.locals import *
 
 
 class GameWindow:
-    def __init__(self, size_x, size_y, cell_size, displaysurf, fps):
+    def __init__(self, size_x, size_y, cell_size, fps):
         self.fpsClock = pygame.time.Clock()
         self.cellSize = cell_size  # have to be even
         self.height = size_x
         self.width = size_y
-        self.DISPLAYSURF = displaysurf
+        self.DISPLAYSURF = pygame.display.set_mode(
+            (self.cellSize * size_x, self.cellSize * size_y))
         self.fps = fps
 
-        WHITE = (255, 255, 255)
-        RED = (255, 0, 0)
-        self.SNAKE_COLOR = WHITE
-        self.FRUIT_COLOR = RED
+        self.resourcesPath = "res/"
 
-        segmentImg = pygame.image.load('block.png')
+        segmentImg = pygame.image.load(self.resourcesPath + 'block.png')
         self.segmentImg = pygame.transform.scale(
             segmentImg, (self.cellSize, self.cellSize))
 
-        grassImg = pygame.image.load('grass.jpg')
+        fruitImg = pygame.image.load(self.resourcesPath + 'fruit.png')
+        self.fruitImg = pygame.transform.scale(
+            fruitImg, (self.cellSize, self.cellSize))
+
+        grassImg = pygame.image.load(self.resourcesPath + 'grass.jpg')
         self.grassImg = pygame.transform.scale(
             grassImg, (self.cellSize * size_x, self.cellSize * size_y))
 
-        headImg = pygame.image.load('head.png')
+        headImg = pygame.image.load(self.resourcesPath + 'head.png')
         self.headImg = pygame.transform.scale(
             headImg, (self.cellSize, self.cellSize))
 
         mixer.init()
-        mixer.music.load("sound.mp3")
+        mixer.music.load(self.resourcesPath + "sound.mp3")
         mixer.music.set_volume(0.1)
 
     def draw_background(self):
@@ -40,7 +43,6 @@ class GameWindow:
             0, 0,
             self.height * self.cellSize, self.width * self.cellSize
         )
-        #pygame.draw.rect(self.DISPLAYSURF, BLACK, position)
         self.DISPLAYSURF.blit(self.grassImg, (0, 0))
 
     def draw_segment(self, x, y):
@@ -68,11 +70,10 @@ class GameWindow:
 
     def draw_fruit(self, x, y):
         position = (
-            x * self.cellSize + self.cellSize // 2,
-            y * self.cellSize + self.cellSize // 2
+            x * self.cellSize,
+            y * self.cellSize
         )
-        pygame.draw.circle(self.DISPLAYSURF, self.FRUIT_COLOR,
-                           position, self.cellSize // 2)
+        self.DISPLAYSURF.blit(self.fruitImg, position)
 
     def translate_event(self):
         for event in pygame.event.get():
@@ -102,10 +103,24 @@ class GameWindow:
 
     def gameover(self, points):
         position = (
-            0, 0,
-            self.height * self.cellSize, self.width * self.cellSize
+            self.height // 4 * self.cellSize, self.width // 4 * self.cellSize,
+            self.height // 2 * self.cellSize, self.width // 2 * self.cellSize
         )
-        #pygame.draw.rect(self.DISPLAYSURF, BLACK, position)
+        s = pygame.Surface((position[2], position[3]),
+                           pygame.SRCALPHA)   # per-pixel alpha
+        s.fill((0, 0, 0, 128))
+        self.DISPLAYSURF.blit(s, position)
+
+        smallfont = pygame.font.SysFont('Corbel', 35)
+        text = smallfont.render(
+            'Points: ' + str(points), True, (255, 255, 255, 128))
+        self.DISPLAYSURF.blit(
+            text, (position[0] + position[2] // 2 - text.get_width() // 2, position[1] + position[3] // 2 - self.cellSize))
+        text = smallfont.render("Please wait...", True, (255, 255, 255))
+        self.DISPLAYSURF.blit(
+            text, (position[0] + position[2] // 2 - text.get_width() // 2, position[1] + position[3] // 2 + self.cellSize))
+        pygame.display.update()
+        time.sleep(3)
 
     def fpsTick(self):
         self.fpsClock.tick(self.fps)

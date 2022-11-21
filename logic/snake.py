@@ -14,6 +14,7 @@ class Snake:
     def __init__(self, y_limit, x_limit, fruit_count):
         self.y_limit = y_limit
         self.x_limit = x_limit
+        self.idleTime = 0
 
         # initial configure
         self.segments = [[0, 0], [1, 0], [2, 0], [2, 1]]
@@ -45,11 +46,16 @@ class Snake:
             self.food_provider.food.remove(head)
             self.has_eaten = True
             self.food_provider.generate()
+            self.idleTime = 0
             return 1
         # eat yourself
         elif self.segments.count(head) != 1:
             return -1
         else:
+            self.idleTime = self.idleTime + 1
+            if(self.idleTime == 40):
+                self.food_provider.generate()
+                self.idleTime = 0
             return 0
 
     def move(self):

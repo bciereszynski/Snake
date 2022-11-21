@@ -7,16 +7,16 @@ from menu import Menu
 class Screen:
     def __init__(self):
 
-        self.height = 20
-        self.width = 15
+        self.cellsX = 20
+        self.cellsY = 15
         self.cellSize = 41
 
         pygame.init()
-        self.surf = pygame.display.set_mode(
-            (self.cellSize * self.height, self.cellSize * self.width))
+
         pygame.display.set_caption('Snake')
 
-        m = Menu(self.surf, self.cellSize)
+        m = Menu(self.cellSize, (self.cellSize *
+                                 self.cellsX, self.cellSize * self.cellsY))
 
 
 if __name__ == "__main__":
